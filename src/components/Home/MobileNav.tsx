@@ -20,36 +20,26 @@ export default function MobileNav({ children }: { children: React.ReactNode }) {
       <SheetTrigger>{children}</SheetTrigger>
       <SheetContent side="right" className="w-[300px] sm:w-[350px]">
         <SheetHeader>
-          <SheetTitle>
-            <div className="flex items-center justify-between max-w-[150px] w-full">
-              <SignedOut>
-                <SignInButton />
-              </SignedOut>
-              <SignedIn>
-                <UserButton />
-              </SignedIn>
-              Menu
-            </div>
-          </SheetTitle>
+          <SheetTitle>Menu</SheetTitle>
         </SheetHeader>
-        <div className="flex flex-col space-y-4 mt-9">
+        <div className="mt-9 flex flex-col space-y-4">
           <Link
             href={"/#pricing"}
-            className="w-full bg-gradient-to-r from-indigo-800 via-blue-800 to-blue-500 text-white transition duration-300 ease-in-out font-semibold px-6 py-2 rounded-full hover:opacity-80 text-center"
+            className="w-full rounded-full bg-gradient-to-r from-indigo-800 via-blue-800 to-blue-500 px-6 py-2 text-center font-semibold text-white transition duration-300 ease-in-out hover:opacity-80"
             onClick={() => setOpen(false)}
           >
             Pricing
           </Link>
           <LoadingButton
             href={"/feedback"}
-            className="w-full bg-gradient-to-r from-indigo-800 via-blue-800 to-blue-500 text-white transition duration-300 ease-in-out font-semibold px-6 py-2 rounded-full hover:opacity-80 text-center"
+            className="w-full rounded-full bg-gradient-to-r from-indigo-800 via-blue-800 to-blue-500 px-6 py-2 text-center font-semibold text-white transition duration-300 ease-in-out hover:opacity-80"
           >
             Feedback
           </LoadingButton>
 
           <LoadingButton
             href={"/dashboard"}
-            className="w-full bg-gradient-to-r from-indigo-800 via-blue-800 to-transparent text-white transition duration-300 ease-in-out font-semibold px-6 py-2 rounded-full hover:opacity-80"
+            className="w-full rounded-full bg-gradient-to-r from-indigo-800 via-blue-800 to-transparent px-6 py-2 font-semibold text-white transition duration-300 ease-in-out hover:opacity-80"
           >
             Get Started
           </LoadingButton>

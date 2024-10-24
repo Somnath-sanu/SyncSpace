@@ -23,8 +23,10 @@ import { z } from "zod";
 import { toast } from "sonner";
 import MediaRoom from "./livekit/media-room";
 import { AudioButton } from "./AudioButton";
-import { Pencil } from "lucide-react";
+import { Brain, Pencil } from "lucide-react";
 import ActionButton from "./ActionButton";
+import { Button } from "./ui/button";
+import AiDialog from "./ai/ai-dialog";
 
 const CollaborativeRoom = ({
   roomId,
@@ -34,7 +36,7 @@ const CollaborativeRoom = ({
   audio,
 }: CollaborativeRoomProps) => {
   const [documentTitle, setDocumentTitle] = useState<string>(
-    roomMetadata.title
+    roomMetadata.title,
   );
   const [editing, setEditing] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -49,7 +51,7 @@ const CollaborativeRoom = ({
   // console.log({ audio });
 
   const updateTitleHandler = async (
-    e: React.KeyboardEvent<HTMLInputElement>
+    e: React.KeyboardEvent<HTMLInputElement>,
   ) => {
     if (e.key === "Enter" && !e.shiftKey) {
       const { success } = titleSchema.safeParse(documentTitle);
@@ -136,7 +138,7 @@ const CollaborativeRoom = ({
                   />
                 ) : (
                   <>
-                    <p className="line-clamp-1 border-dark-400 text-base font-semibold leading-[24px] sm:pl-0 sm:text-xl">
+                    <p className="border-dark-400 line-clamp-1 text-base font-semibold leading-[24px] sm:pl-0 sm:text-xl">
                       {documentTitle}
                     </p>
                   </>
@@ -150,13 +152,13 @@ const CollaborativeRoom = ({
                   >
                     <Pencil
                       onClick={() => setEditing(true)}
-                      className="pointer cursor-pointer size-4"
+                      className="pointer size-4 cursor-pointer"
                     />
                   </ActionButton>
                 )}
 
                 {currentUserType !== "editor" && !editing && (
-                  <p className="rounded-md bg-dark-400/50 px-2 py-0.5 text-xs text-blue-100/50">
+                  <p className="bg-dark-400/50 rounded-md px-2 py-0.5 text-xs text-blue-100/50">
                     View only
                   </p>
                 )}
@@ -164,6 +166,13 @@ const CollaborativeRoom = ({
                 {loading && <p className="text-sm text-gray-400">saving...</p>}
               </div>
               <div className="flex w-full flex-1 justify-end gap-2 sm:gap-3">
+                <AiDialog>
+                  <Button variant="ghost" size="icon" className="h-10 w-10">
+                    <ActionButton side="bottom" content="AI" sideOffset={15}>
+                      <Brain className="h-5 w-5" />
+                    </ActionButton>
+                  </Button>
+                </AiDialog>
                 <ActiveCollaborators />
                 <ActionButton side="bottom" content="Audio room">
                   <AudioButton />

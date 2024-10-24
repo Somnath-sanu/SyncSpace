@@ -12,7 +12,7 @@ const plans = [
       "5 members per document",
       "Real-time collaboration",
     ],
-    buttonText: "Get Started",
+    buttonText: "Free",
     paymentLink: "",
   },
   {

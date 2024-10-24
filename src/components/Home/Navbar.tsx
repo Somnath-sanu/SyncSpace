@@ -45,7 +45,15 @@ export default function Navbar() {
             <UserButton />
           </SignedIn>
         </div>
-        <div className="flex items-center md:hidden">
+        <div className="flex items-center justify-center gap-2 md:hidden">
+          <div>
+            <SignedOut>
+              <SignInButton />
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+          </div>
           <MobileNav>
             <button className="text-white focus:outline-none">
               <svg

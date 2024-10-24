@@ -66,7 +66,7 @@ export function Editor({
         <div className="z-50 custom-scrollbar w-screen overflow-auto border-y border-dark-300 bg-dark-100 pl-3 pr-4 shadow-sm flex min-w-full justify-between">
           <ToolbarPlugin />
           {user?.id === roomMetadata.creatorId && ( //TODO: only room creator can delete fix this
-            <ActionButton content="Delete document" side="bottom">
+            <ActionButton content="Delete Document" side="bottom">
               <DeleteModal
                 roomId={roomId}
                 setOpen={() => setOpen(!open)}
