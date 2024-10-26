@@ -35,8 +35,6 @@ export function Card({
     getRandomImage();
   }, []);
 
-  
-
   return (
     <>
       {cardLoading ? (
@@ -44,8 +42,8 @@ export function Card({
       ) : (
         <div
           className={cn(
-            "rounded-lg relative bg-gray-100 dark:bg-neutral-900 overflow-hidden col-span-1 aspect-[100/127] transition-all duration-300 ease-out z-10",
-            hovered !== null && hovered !== id && "blur-sm scale-[0.98]"
+            "relative z-10 col-span-1 aspect-[100/127] overflow-hidden rounded-lg bg-gray-100 transition-all duration-300 ease-out dark:bg-neutral-900",
+            hovered !== null && hovered !== id && "scale-[0.98] blur-sm",
           )}
           onMouseEnter={() => setHovered(id)}
           onMouseLeave={() => setHovered(null)}
@@ -56,17 +54,19 @@ export function Card({
               src={imageUrl || "/abs1.jpeg"}
               alt={"placeholder"}
               fill
-              className=" object-cover absolute inset-0"
+              className="absolute inset-0 object-cover"
             />
           </div>
           <div
             className={cn(
-              "absolute inset-0 bg-black/50 flex items-end py-8 px-4 transition-opacity duration-300",
-              hovered === id ? "sm:opacity-100" : "sm:opacity-0"
+              "absolute inset-0 flex items-end bg-black/50 px-4 py-8 transition-opacity duration-300",
+              hovered === id ? "sm:opacity-100" : "sm:opacity-0",
             )}
           >
-            <div className="text-xl md:text-2xl font-medium bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-200 select-none opacity-100">
-              {metadata.title}
+            <div className="w-full select-none truncate bg-gradient-to-b from-neutral-50 to-neutral-200 bg-clip-text text-xl font-medium text-transparent opacity-100">
+              <p className="w-full truncate text-balance text-center">
+                {metadata.title}
+              </p>
             </div>
           </div>
         </div>

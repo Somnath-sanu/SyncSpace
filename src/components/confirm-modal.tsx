@@ -20,6 +20,7 @@ interface ConfirmModalProps {
   disabled?: boolean;
   header: string;
   description?: string;
+  removing?: boolean;
 }
 
 export const ConfirmModal = ({
@@ -28,6 +29,7 @@ export const ConfirmModal = ({
   disabled,
   header,
   description,
+  removing,
 }: ConfirmModalProps) => {
   const handleConfirm = () => {
     onConfirm();
@@ -50,8 +52,9 @@ export const ConfirmModal = ({
             className="bg-destructive hover:bg-red-700"
           >
             {disabled ? (
-              <span className="flex gap-1 items-center">
-                <Loader className="size-4 animate-spin" /> Deleting
+              <span className="flex items-center gap-1">
+                <Loader className="size-4 animate-spin" />
+                {removing ? "leaving" : " Deleting"}
               </span>
             ) : (
               "Confirm"

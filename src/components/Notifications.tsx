@@ -15,7 +15,7 @@ import {
   useUnreadInboxNotificationsCount,
 } from "@liveblocks/react/suspense";
 import Image from "next/image";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { ScrollArea } from "./ui/scroll-area";
 
 const Notifications = () => {
@@ -23,7 +23,7 @@ const Notifications = () => {
   const { count } = useUnreadInboxNotificationsCount();
 
   const unreadNotifications = inboxNotifications.filter(
-    (notification) => !notification.readAt
+    (notification) => !notification.readAt,
   );
 
   return (

@@ -9,18 +9,26 @@ import {
   SheetTrigger,
 } from "../ui/sheet";
 
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import LoadingButton from "../LoadingButton";
 import { useState } from "react";
 
-export default function MobileNav({ children }: { children: React.ReactNode }) {
+
+export default function MobileNav({
+  children,
+  user,
+}: {
+  children: React.ReactNode;
+  user: string | undefined;
+}) {
   const [open, setOpen] = useState(false);
+  // console.log({user}); // undefined
+  
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger>{children}</SheetTrigger>
+      <SheetTrigger asChild>{children}</SheetTrigger>
       <SheetContent side="right" className="w-[300px] sm:w-[350px]">
         <SheetHeader>
-          <SheetTitle>Menu</SheetTitle>
+          <SheetTitle>SyncSpace</SheetTitle>
         </SheetHeader>
         <div className="mt-9 flex flex-col space-y-4">
           <Link
@@ -41,7 +49,7 @@ export default function MobileNav({ children }: { children: React.ReactNode }) {
             href={"/dashboard"}
             className="w-full rounded-full bg-gradient-to-r from-indigo-800 via-blue-800 to-transparent px-6 py-2 font-semibold text-white transition duration-300 ease-in-out hover:opacity-80"
           >
-            Get Started
+            {user ? "Dashboard" : "Get Started"}
           </LoadingButton>
         </div>
       </SheetContent>

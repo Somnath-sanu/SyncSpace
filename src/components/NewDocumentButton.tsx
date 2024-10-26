@@ -54,7 +54,7 @@ export default function NewDocumentButton({
         pending && "opacity-75 cursor-wait hover:bg-blue-600 select-none"
       )}
       onClick={() => startTransaction(addDocumentHandler)}
-      disabled={roomDocuments?.data.length === 3}
+      disabled={roomDocuments?.data.length >= 3}
     >
       <Plus
         className={cn("h-12 w-12 text-white stroke-1", pending && "invisible")}

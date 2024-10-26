@@ -62,6 +62,24 @@ const ShareModal = ({
       return;
     }
 
+    /**
+     * Use some don't map
+     * The issue is that the return statements inside the map callback function only return from that callback function, not from the entire shareDocumentHandler function. The map function will continue to iterate through all collaborators regardless of these returns.
+     */
+
+    // const isAlreadyInvited = collaborators.filter(
+    //   (collaborator) => collaborator.email === email,
+    // );
+
+    // if (isAlreadyInvited.length > 0) {
+    //   toast.warning("Already invited!");
+    //   return;
+    // }
+
+    // console.log({
+    //   collaborators,
+    // });
+
     try {
       const response = await getAllUsers();
 

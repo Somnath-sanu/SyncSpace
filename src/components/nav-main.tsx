@@ -4,6 +4,7 @@
 "use client";
 
 import {
+  DoorOpen,
   Link2,
   Lock,
   MoreHorizontal,
@@ -27,19 +28,23 @@ import {
 } from "@/components/ui/sidebar";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { deleteDocument, getDocuments } from "@/lib/actions/room.actions";
+import {
+  deleteDocument,
+  getDocuments,
+  removeCollaborator,
+} from "@/lib/actions/room.actions";
 import { useEffect, useState, useTransition } from "react";
-import { Actions } from "./actions";
+
 import { ConfirmModal } from "./confirm-modal";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
-import { getUserDetail } from "@/app/dashboard/action";
-import { metadata } from "@/app/layout";
+
 import { dateConverter } from "@/lib/utils";
 import { Badge } from "./ui/badge";
 
 import RenameModal from "./rename-modal";
 import { Dialog, DialogTrigger } from "./ui/dialog";
+import { useUnreadInboxNotificationsCount } from "@liveblocks/react/suspense";
 
 interface Data {
   id: string;
@@ -64,20 +69,22 @@ export function NavMain() {
   async function getAllDocuments() {
     if (!user) return;
     const roomDocuments = await getDocuments(
-      user.emailAddresses[0].emailAddress
+      user.emailAddresses[0].emailAddress,
     );
 
     setAllDocuments(roomDocuments.data);
   }
-
+  const { count } = useUnreadInboxNotificationsCount(); // for showing cards immediately whenever user gets notificaton about it
   useEffect(() => {
     if (user) {
       getAllDocuments();
+      router.refresh();
     }
-  }, [user]);
+  }, [user, count]);
 
   const [pending, startTransaction] = useTransition();
   const [isRenameOpen, setIsRenameOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   /**
    * u can call server action directly into startTransaction without async await
@@ -89,6 +96,18 @@ export function NavMain() {
       setAllDocuments((prev) => prev.filter((p) => p.id != roomId));
     } catch (error) {
       console.log("Error deleting document from nav-main: ", error);
+    }
+  };
+
+  const leaveRoom = async (roomId: string, email: string) => {
+    try {
+      setLoading(true);
+      await removeCollaborator({ roomId, email });
+      setAllDocuments((prev) => prev.filter((p) => p.id != roomId));
+    } catch (error) {
+      console.log("Error leaving room : ", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -117,14 +136,14 @@ export function NavMain() {
           <DropdownMenu key={id}>
             <SidebarMenuItem>
               <DropdownMenuTrigger asChild>
-                <div className="flex flex-col gap-0.5 items-start justify-center shadow-inner  p-2 rounded-md space-y-1 border-b border-blue-900">
+                <div className="flex flex-col items-start justify-center gap-0.5 space-y-1 rounded-md border-b border-blue-900 p-2 shadow-inner">
                   <SidebarMenuButton className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
                     {metadata.title}
 
                     <MoreHorizontal className="ml-auto" />
                   </SidebarMenuButton>
-                  <div className="flex px-2 items-end justify-end w-full text-xs">
-                    <Badge className="font-semibold mr-auto  bg-gradient-to-br from-blue-400  to-blue-600 text-xs pointer-events-none shadow-sm">
+                  <div className="flex w-full items-end justify-end px-2 text-xs">
+                    <Badge className="pointer-events-none mr-auto bg-gradient-to-br from-blue-400 to-blue-600 text-xs font-semibold shadow-sm">
                       {dateConverter(createdAt)}
                     </Badge>
                   </div>
@@ -135,10 +154,10 @@ export function NavMain() {
                 side={isMobile ? "bottom" : "right"}
               >
                 <DropdownMenuItem
-                  className="p-3 cursor-pointer"
+                  className="cursor-pointer p-3"
                   onClick={() => onCopyLink(id)}
                 >
-                  <Link2 className="h-4 w-4 mr-2 " />
+                  <Link2 className="mr-2 h-4 w-4" />
                   Copy board link
                 </DropdownMenuItem>
 
@@ -154,14 +173,13 @@ export function NavMain() {
                       disabled={user?.id !== metadata.creatorId}
                     >
                       <Button
-                        className="p-3 cursor-pointer text-sm w-full justify-start"
+                        className="w-full cursor-pointer justify-start p-3 text-sm"
                         variant={"ghost"}
-                        disabled={user?.id !== metadata.creatorId}
                       >
-                        <Pencil className="h-4 w-4 mr-2" />
+                        <Pencil className="mr-2 h-4 w-4" />
                         Rename
                         {user?.id !== metadata.creatorId && (
-                          <Lock className="h-4 w-4 mr-2" />
+                          <Lock className="mr-2 h-4 w-4" />
                         )}
                       </Button>
                     </DropdownMenuItem>
@@ -173,6 +191,30 @@ export function NavMain() {
                     onClose={() => setIsRenameOpen(false)}
                   />
                 </Dialog>
+                {user?.id !== metadata.creatorId && (
+                  <ConfirmModal
+                    header="Leave Document"
+                    description="This action will remove you from the document and you won't be able to access it."
+                    disabled={loading}
+                    removing
+                    onConfirm={() => {
+                      if (user?.emailAddresses[0]?.emailAddress === undefined) {
+                        toast.error("Email address couldn't found!");
+                        return;
+                      }
+
+                      leaveRoom(id, user?.emailAddresses[0]?.emailAddress);
+                    }}
+                  >
+                    <Button
+                      className="w-full cursor-pointer justify-start p-3 text-sm"
+                      variant={"ghost"}
+                    >
+                      <DoorOpen className="mr-2 h-4 w-4" />
+                      Leave Room
+                    </Button>
+                  </ConfirmModal>
+                )}
 
                 <ConfirmModal
                   header="Delete board?"
@@ -181,14 +223,14 @@ export function NavMain() {
                   onConfirm={() => startTransaction(() => onDelete(id))}
                 >
                   <Button
-                    className="p-3 cursor-pointer text-sm w-full justify-start"
+                    className="w-full cursor-pointer justify-start p-3 text-sm"
                     variant={"ghost"}
                     disabled={user?.id !== metadata.creatorId}
                   >
-                    <Trash2 className="h-4 w-4 mr-2" />
+                    <Trash2 className="mr-2 h-4 w-4" />
                     Delete
                     {user?.id !== metadata.creatorId && (
-                      <Lock className="h-4 w-4 mr-2" />
+                      <Lock className="mr-2 h-4 w-4" />
                     )}
                   </Button>
                 </ConfirmModal>

@@ -1,7 +1,12 @@
 "use client";
 import Link from "next/link";
 import { TypewriterEffectSmooth } from "./TypewriterEffect";
-export function TypewriterEffectSmoothDemo() {
+import { User } from "@clerk/nextjs/server";
+export function TypewriterEffectSmoothDemo({
+  user,
+}: {
+  user: string | undefined;
+}) {
   const words = [
     {
       text: "Work",
@@ -21,20 +26,20 @@ export function TypewriterEffectSmoothDemo() {
     },
   ];
   return (
-    <div className="flex flex-col items-center justify-center h-[40rem]  ">
-      <p className="text-neutral-600 dark:text-neutral-200 text-xs sm:text-xl max-w-screen-lg text-balance mx-auto text-center ">
+    <div className="flex h-[40rem] flex-col items-center justify-center">
+      <p className="mx-auto max-w-screen-lg text-balance text-center text-xs text-neutral-600 dark:text-neutral-200 sm:text-xl">
         Turn any document into a space for live collaboration and watch ideas
         grow together.
       </p>
       <TypewriterEffectSmooth words={words} />
-      <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 space-x-0 md:space-x-4">
+      <div className="flex flex-col space-x-0 space-y-4 md:flex-row md:space-x-4 md:space-y-0">
         <Link href={"/dashboard"} className="block">
-          <button className="w-40 h-10 rounded-xl bg-gradient-to-r from-indigo-800 via-blue-800 to-transparent  outline-none  dark:border-blue-900/70 border-transparent text-white text-sm shadow-sm hover:scale-105 border-r transition-transform">
-            Get Started
+          <button className="h-10 w-40 rounded-xl border-r border-transparent bg-gradient-to-r from-indigo-800 via-blue-800 to-transparent text-sm text-white shadow-sm outline-none transition-transform hover:scale-105 dark:border-blue-900/70">
+            {user ? "Dashboard" : "Get Started"}
           </button>
         </Link>
         <Link href={"/sign-up"} className="block">
-          <button className="w-40 h-10 rounded-xl bg-gradient-to-r from-white via-neutral-50 to-neutral-100 text-black border border-black  text-sm animate-shimmer shadow-sm hover:scale-105 transition-transform">
+          <button className="h-10 w-40 animate-shimmer rounded-xl border border-black bg-gradient-to-r from-white via-neutral-50 to-neutral-100 text-sm text-black shadow-sm transition-transform hover:scale-105">
             Signup
           </button>
         </Link>

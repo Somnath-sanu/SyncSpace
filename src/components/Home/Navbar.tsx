@@ -3,8 +3,10 @@ import Link from "next/link";
 
 import MobileNav from "./MobileNav";
 import LoadingButton from "../LoadingButton";
+import { currentUser } from "@clerk/nextjs/server";
 
-export default function Navbar() {
+export default async function Navbar() {
+  const user = await currentUser();
   return (
     <header className="sticky top-0 z-10 from-black via-black to-transparent shadow-sm dark:bg-gradient-to-r">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
@@ -33,7 +35,7 @@ export default function Navbar() {
             href={"/dashboard"}
             className="rounded-full bg-gradient-to-r from-indigo-800 via-blue-800 to-transparent px-6 py-2 font-semibold text-white transition duration-300 ease-in-out hover:opacity-80"
           >
-            Get Started
+            {user ? "Dashboard" : "Get Started"}
           </LoadingButton>
 
           {/* <ThemeDialog/> */}
@@ -46,7 +48,7 @@ export default function Navbar() {
           </SignedIn>
         </div>
         <div className="flex items-center justify-center gap-2 md:hidden">
-          <div>
+          <div className="p-0 ">
             <SignedOut>
               <SignInButton />
             </SignedOut>
@@ -54,7 +56,7 @@ export default function Navbar() {
               <UserButton />
             </SignedIn>
           </div>
-          <MobileNav>
+          <MobileNav user={user?.emailAddresses[0].emailAddress}>
             <button className="text-white focus:outline-none">
               <svg
                 className="h-6 w-6"

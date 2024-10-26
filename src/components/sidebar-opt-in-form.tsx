@@ -21,7 +21,7 @@ export function SidebarOptInForm({ roomDocuments }: { roomDocuments: any }) {
           <strong>{roomDocuments?.data.length}</strong> Out of{" "}
           <strong className="">3</strong> files used
         </h2>
-        {roomDocuments?.data.length === 3 && (
+        {roomDocuments?.data.length >= 3 && (
           <Alert>
             <AlertTitle className="flex gap-2 items-center justify-center">
               <AlertCircle className="h-7 w-7" />
