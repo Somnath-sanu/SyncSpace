@@ -9,8 +9,8 @@ import SyncSpaceInfo from "@/components/Home/SyncSpaceInfo";
 
 export default function Home() {
   return (
-    <main className="relative flex w-full min-w-0 gap-5">
-      <section className="w-full min-w-0 dark:bg-black">
+    <main className="relative flex w-full min-w-0 gap-5 dark">
+      <section className="w-full min-w-0 bg-black">
         <Navbar />
         <BgGradient stars={250}>
           <Hero />

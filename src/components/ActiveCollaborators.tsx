@@ -2,8 +2,11 @@ import { useOthers } from "@liveblocks/react/suspense";
 import Image from "next/image";
 import ActionButton from "./ActionButton";
 
+
 const ActiveCollaborators = () => {
   const others = useOthers();
+  
+  
 
   const collaborators = others.map((other) => other.info);
 

@@ -10,8 +10,6 @@ export const getClerkUsers = async ({ userIds }: { userIds: string[] }) => {
       emailAddress: userIds,
     });
 
-    
-
     // console.log({
     //   data,
     //   userIds,
@@ -25,7 +23,7 @@ export const getClerkUsers = async ({ userIds }: { userIds: string[] }) => {
     }));
 
     const sortedUsers = userIds.map((email) =>
-      users.find((user) => user.email === email)
+      users.find((user) => user.email === email),
     );
 
     return parseStringify(sortedUsers);
@@ -47,7 +45,7 @@ export const getDocumentUsers = async ({
     const room = await liveblocks.getRoom(roomId);
 
     const users = Object.keys(room.usersAccesses).filter(
-      (email) => email !== currentUser
+      (email) => email !== currentUser,
     );
 
     if (text.length) {
@@ -55,7 +53,7 @@ export const getDocumentUsers = async ({
       const lowerCaseText = text.toLowerCase();
 
       const filteredUsers = users.filter((email: string) =>
-        email.toLowerCase().includes(lowerCaseText)
+        email.toLowerCase().includes(lowerCaseText),
       );
 
       return parseStringify(filteredUsers);
@@ -67,8 +65,12 @@ export const getDocumentUsers = async ({
   }
 };
 
-
 export const getAllUsers = async () => {
-  const response = await clerkClient().users.getUserList();
+  //TODO: Find better approach -> limit more than 500 not working
+  const response = await clerkClient().users.getUserList({ limit: 500 });
   return parseStringify(response);
-}
+};
+
+/**
+ * The expression (nextPage && { cursor: nextPage }) may return undefined if nextPage is falsy. When you use the spread operator on undefined, TypeScript throws the TS2698 error.
+ */

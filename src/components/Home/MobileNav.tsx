@@ -26,7 +26,7 @@ export default function MobileNav({
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>{children}</SheetTrigger>
-      <SheetContent side="right" className="w-[300px] sm:w-[350px]">
+      <SheetContent side="right" className="w-[300px] sm:w-[350px] dark">
         <SheetHeader>
           <SheetTitle>SyncSpace</SheetTitle>
         </SheetHeader>

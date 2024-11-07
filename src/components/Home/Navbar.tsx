@@ -8,7 +8,7 @@ import { currentUser } from "@clerk/nextjs/server";
 export default async function Navbar() {
   const user = await currentUser();
   return (
-    <header className="sticky top-0 z-10 from-black via-black to-transparent shadow-sm dark:bg-gradient-to-r">
+    <header className="sticky top-0 z-10 from-black via-black to-transparent shadow-sm bg-gradient-to-r">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
         <Link
           href="/"

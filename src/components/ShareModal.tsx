@@ -83,11 +83,18 @@ const ShareModal = ({
     try {
       const response = await getAllUsers();
 
-      const isUserExist = response?.data.filter(
-        (users: any) =>
+      // console.log({ response });
+
+      const isUserExist = response?.data.filter((users: any) => {
+        // console.log({users});
+
+        return (
           users?.emailAddresses[0].emailAddress === email &&
-          users?.emailAddresses[0].emailAddress !== user.info.email,
-      );
+          users?.emailAddresses[0].emailAddress !== user.info.email
+        );
+      });
+
+      // console.log({ isUserExist });
 
       // console.log(user.info.id === creatorId); // true
 
