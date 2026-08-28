@@ -10,10 +10,15 @@ import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import React, { Suspense } from "react";
 
-const Page = async ({
-  params: { id },
-  searchParams: { audio },
-}: SearchParamProps) => {
+export default async function Page({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ audio: string }>;
+}) {
+  const { id } = await params;
+  const { audio } = await searchParams;
   const clerkUser = await currentUser();
 
   if (!currentUser) redirect("/sign-in");
@@ -64,4 +69,3 @@ const Page = async ({
   );
 };
 
-export default Page;
